@@ -1,0 +1,179 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WellSaid Labs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "apikey": {
+        "key": "X-Api-Key",
+        "value": "{{apiKey}}",
+        "in": "header"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Text-to-Speech", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Render text to speech (streaming).", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/tts/stream",
+            "headers": [{ "name": "Accept", "value": "audio/mpeg" }],
+            "body": { "type": "json", "data": "{\n  \"text\": \"Hello world!\",\n  \"speaker_id\": \"3\"\n}" }
+          },
+          "docs": "Renders text with the chosen voice avatar and returns the audio as an MP3 stream for low time-to-first-byte playback."
+        },
+        {
+          "info": { "name": "Render text to speech with timing.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/word-timing",
+            "body": { "type": "json", "data": "{\n  \"text\": \"Hello world!\",\n  \"speaker_id\": \"3\"\n}" }
+          },
+          "docs": "Renders text to speech and returns word-level timing information and subtitles aligned to the audio."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Clips", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a clip.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/clips",
+            "body": { "type": "json", "data": "{\n  \"text\": \"Hello world!\",\n  \"speaker_id\": \"3\"\n}" }
+          },
+          "docs": "Creates a new text-to-speech clip asynchronously."
+        },
+        {
+          "info": { "name": "List recent clips.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.wellsaidlabs.com/v1/clips" },
+          "docs": "Returns a list of recently created clips."
+        },
+        {
+          "info": { "name": "Get a single clip.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/clips/:clip_id",
+            "params": [{ "name": "clip_id", "value": "", "type": "path", "description": "The id of the clip." }]
+          },
+          "docs": "Returns information about a single clip."
+        },
+        {
+          "info": { "name": "Combine clips.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/clips/combine",
+            "body": { "type": "json", "data": "{\n  \"clip_ids\": [\"clip_1\", \"clip_2\"],\n  \"pause\": 0.5\n}" }
+          },
+          "docs": "Combines a list of clips into a single audio file with pauses between them."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Voice Avatars", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get available avatars.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.wellsaidlabs.com/v1/avatars" },
+          "docs": "Lists all available voice avatars with their metadata (id, name, style, language, accent, characteristics, models)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Pronunciation", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List replacement libraries.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.wellsaidlabs.com/v1/replacement-libraries" },
+          "docs": "Returns the list of available replacement libraries."
+        },
+        {
+          "info": { "name": "Create a replacement library.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries",
+            "body": { "type": "json", "data": "{\n  \"name\": \"Brand Names\"\n}" }
+          },
+          "docs": "Creates a new replacement library."
+        },
+        {
+          "info": { "name": "Get a replacement library.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id",
+            "params": [{ "name": "library_id", "value": "", "type": "path", "description": "The id of the replacement library." }]
+          },
+          "docs": "Returns information about a single replacement library."
+        },
+        {
+          "info": { "name": "Delete a replacement library.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id",
+            "params": [{ "name": "library_id", "value": "", "type": "path", "description": "The id of the replacement library." }]
+          },
+          "docs": "Deletes a replacement library and its replacements."
+        },
+        {
+          "info": { "name": "List replacements.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements",
+            "params": [{ "name": "library_id", "value": "", "type": "path", "description": "The id of the replacement library." }]
+          },
+          "docs": "Returns the list of replacements in a library."
+        },
+        {
+          "info": { "name": "Create a replacement.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements",
+            "params": [{ "name": "library_id", "value": "", "type": "path", "description": "The id of the replacement library." }],
+            "body": { "type": "json", "data": "{\n  \"original\": \"WSL\",\n  \"replacement\": \"Well Said Labs\"\n}" }
+          },
+          "docs": "Creates a new pronunciation replacement in the library."
+        },
+        {
+          "info": { "name": "Get a replacement.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements/:replacement_id",
+            "params": [
+              { "name": "library_id", "value": "", "type": "path", "description": "The id of the replacement library." },
+              { "name": "replacement_id", "value": "", "type": "path", "description": "The id of the replacement." }
+            ]
+          },
+          "docs": "Returns a single replacement from a library."
+        },
+        {
+          "info": { "name": "Delete a replacement.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements/:replacement_id",
+            "params": [
+              { "name": "library_id", "value": "", "type": "path", "description": "The id of the replacement library." },
+              { "name": "replacement_id", "value": "", "type": "path", "description": "The id of the replacement." }
+            ]
+          },
+          "docs": "Removes a replacement from a library."
+        },
+        {
+          "info": { "name": "Get respelling suggestions.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/respelling-suggestions",
+            "params": [{ "name": "word", "value": "nginx", "type": "query", "description": "The word to get respelling suggestions for." }]
+          },
+          "docs": "Returns respelling suggestions for a word to coax correct pronunciation."
+        }
+      ]
+    }
+  ]
+}

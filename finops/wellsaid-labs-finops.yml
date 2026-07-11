@@ -1,0 +1,109 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: WellSaid Labs
+providerId: wellsaid-labs
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- AI
+- Text to Speech
+- TTS
+- Voice
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of WellSaid Labs spend. The AI Voice Studio product is billed as a
+  monthly or annual subscription (Trial, Starter, Pro) plus annually-billed team
+  tiers (Business per seat, Enterprise custom), metered on downloaded voiceover
+  minutes with extra minutes purchasable. Programmatic API spend is a separate
+  business arrangement: production API access is gated behind a business plan and
+  governed by a monthly character quota, so the primary API cost driver is
+  characters synthesized per month rather than downloaded minutes. Studio prices
+  are published; API per-character rates are quote-based.
+notes: >-
+  Studio subscription prices captured 2026-07-11 from wellsaid.io/ai-voice-pricing.
+  API per-character pricing is not published and must be confirmed with WellSaid.
+  The dominant API cost lever is the monthly character quota; the dominant Studio
+  cost lever is downloaded minutes and seat count.
+sources:
+- https://www.wellsaid.io/ai-voice-pricing
+- https://www.wellsaid.io/text-to-speech-api
+- https://docs.wellsaidlabs.com/docs/api-specifications
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: WellSaid Labs
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Purchase
+  - Usage
+focusColumns:
+  ServiceName: WellSaid Labs AI Voice
+  ServiceCategory: AI and Machine Learning
+  ProviderName: WellSaid Labs
+  PublisherName: WellSaid Labs
+  InvoiceIssuerName: WellSaid Labs
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Subscription-Based
+meters:
+- name: subscription_seats
+  description: Studio subscription seats billed per plan (Starter, Pro, Business per user).
+  unit: seats
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+- name: downloaded_minutes
+  description: Voiceover minutes downloaded from the Studio, metered against the plan allowance.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - account
+  - user
+- name: api_characters
+  description: Characters synthesized through the API, metered against the monthly character quota.
+  unit: characters
+  aggregation: sum
+  dimensions:
+  - account
+  - api-key
+- name: extra_minutes
+  description: Additional voiceover minutes purchased beyond the plan allowance.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: >-
+    Track API character consumption via the x-quota-remaining response header and
+    Studio downloaded minutes per user against plan allowances.
+- name: Allocation
+  description: >-
+    Map API keys to workloads/teams and Studio seats to users so voice spend maps
+    to internal cost centers.
+- name: Optimization
+  description: >-
+    Cache and reuse rendered clips instead of re-synthesizing identical text;
+    keep requests within the 1,000-character limit and batch efficiently; choose
+    the plan whose minute allowance matches actual usage to avoid extra-minute
+    purchases.
+- name: Accountability
+  description: >-
+    Assign owners per API key and Studio seat; review monthly character quota and
+    downloaded-minute usage against the plan before renewal.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

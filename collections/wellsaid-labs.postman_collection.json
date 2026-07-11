@@ -1,0 +1,194 @@
+{
+  "info": {
+    "name": "WellSaid Labs API",
+    "description": "AI text-to-speech (TTS) voiceover API. Base URL: https://api.wellsaidlabs.com/v1. Authenticate with an X-Api-Key header. Renders text to studio-quality AI voiceover, streams audio for low time-to-first-byte, returns word timing and subtitles, manages async clips, lists voice avatars, and controls pronunciation with replacement libraries. Modeled from docs.wellsaidlabs.com.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "X-Api-Key", "type": "string" },
+      { "key": "value", "value": "{{apiKey}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.wellsaidlabs.com/v1", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Text-to-Speech",
+      "item": [
+        {
+          "name": "Render text to speech (streaming)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "audio/mpeg" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"Hello world!\",\n  \"speaker_id\": \"3\"\n}" },
+            "url": { "raw": "{{baseUrl}}/tts/stream", "host": ["{{baseUrl}}"], "path": ["tts", "stream"] },
+            "description": "Renders text with the chosen voice avatar and returns the audio as an MP3 stream for low time-to-first-byte playback."
+          }
+        },
+        {
+          "name": "Render text to speech with timing",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"Hello world!\",\n  \"speaker_id\": \"3\"\n}" },
+            "url": { "raw": "{{baseUrl}}/word-timing", "host": ["{{baseUrl}}"], "path": ["word-timing"] },
+            "description": "Renders text to speech and returns word-level timing information and subtitles aligned to the audio."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clips",
+      "item": [
+        {
+          "name": "Create a clip",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"Hello world!\",\n  \"speaker_id\": \"3\"\n}" },
+            "url": { "raw": "{{baseUrl}}/clips", "host": ["{{baseUrl}}"], "path": ["clips"] },
+            "description": "Creates a new text-to-speech clip asynchronously."
+          }
+        },
+        {
+          "name": "List recent clips",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/clips", "host": ["{{baseUrl}}"], "path": ["clips"] },
+            "description": "Returns a list of recently created clips."
+          }
+        },
+        {
+          "name": "Get a single clip",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/clips/:clip_id", "host": ["{{baseUrl}}"], "path": ["clips", ":clip_id"], "variable": [{ "key": "clip_id", "value": "" }] },
+            "description": "Returns information about a single clip."
+          }
+        },
+        {
+          "name": "Combine clips",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"clip_ids\": [\"clip_1\", \"clip_2\"],\n  \"pause\": 0.5\n}" },
+            "url": { "raw": "{{baseUrl}}/clips/combine", "host": ["{{baseUrl}}"], "path": ["clips", "combine"] },
+            "description": "Combines a list of clips into a single audio file with pauses between them."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Voice Avatars",
+      "item": [
+        {
+          "name": "Get available avatars",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/avatars", "host": ["{{baseUrl}}"], "path": ["avatars"] },
+            "description": "Lists all available voice avatars with their metadata (id, name, style, language, accent, characteristics, models)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pronunciation",
+      "item": [
+        {
+          "name": "List replacement libraries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/replacement-libraries", "host": ["{{baseUrl}}"], "path": ["replacement-libraries"] },
+            "description": "Returns the list of available replacement libraries."
+          }
+        },
+        {
+          "name": "Create a replacement library",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Brand Names\"\n}" },
+            "url": { "raw": "{{baseUrl}}/replacement-libraries", "host": ["{{baseUrl}}"], "path": ["replacement-libraries"] },
+            "description": "Creates a new replacement library."
+          }
+        },
+        {
+          "name": "Get a replacement library",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/replacement-libraries/:library_id", "host": ["{{baseUrl}}"], "path": ["replacement-libraries", ":library_id"], "variable": [{ "key": "library_id", "value": "" }] },
+            "description": "Returns information about a single replacement library."
+          }
+        },
+        {
+          "name": "Delete a replacement library",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/replacement-libraries/:library_id", "host": ["{{baseUrl}}"], "path": ["replacement-libraries", ":library_id"], "variable": [{ "key": "library_id", "value": "" }] },
+            "description": "Deletes a replacement library and its replacements."
+          }
+        },
+        {
+          "name": "List replacements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/replacement-libraries/:library_id/replacements", "host": ["{{baseUrl}}"], "path": ["replacement-libraries", ":library_id", "replacements"], "variable": [{ "key": "library_id", "value": "" }] },
+            "description": "Returns the list of replacements in a library."
+          }
+        },
+        {
+          "name": "Create a replacement",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"original\": \"WSL\",\n  \"replacement\": \"Well Said Labs\"\n}" },
+            "url": { "raw": "{{baseUrl}}/replacement-libraries/:library_id/replacements", "host": ["{{baseUrl}}"], "path": ["replacement-libraries", ":library_id", "replacements"], "variable": [{ "key": "library_id", "value": "" }] },
+            "description": "Creates a new pronunciation replacement in the library."
+          }
+        },
+        {
+          "name": "Get a replacement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/replacement-libraries/:library_id/replacements/:replacement_id", "host": ["{{baseUrl}}"], "path": ["replacement-libraries", ":library_id", "replacements", ":replacement_id"], "variable": [{ "key": "library_id", "value": "" }, { "key": "replacement_id", "value": "" }] },
+            "description": "Returns a single replacement from a library."
+          }
+        },
+        {
+          "name": "Delete a replacement",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/replacement-libraries/:library_id/replacements/:replacement_id", "host": ["{{baseUrl}}"], "path": ["replacement-libraries", ":library_id", "replacements", ":replacement_id"], "variable": [{ "key": "library_id", "value": "" }, { "key": "replacement_id", "value": "" }] },
+            "description": "Removes a replacement from a library."
+          }
+        },
+        {
+          "name": "Get respelling suggestions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/respelling-suggestions?word=nginx", "host": ["{{baseUrl}}"], "path": ["respelling-suggestions"], "query": [{ "key": "word", "value": "nginx" }] },
+            "description": "Returns respelling suggestions for a word to coax correct pronunciation."
+          }
+        }
+      ]
+    }
+  ]
+}

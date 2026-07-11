@@ -1,0 +1,213 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: WellSaid Labs
+providerId: wellsaid-labs
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- AI
+- Text to Speech
+- TTS
+- Voice
+- Voiceover
+- Plans
+description: >-
+  WellSaid Labs sells the AI Voice Studio product on published self-serve tiers
+  (Trial, Starter, Pro) plus annually-billed team tiers (Business, Enterprise).
+  Studio plans are metered on downloaded voiceover minutes with unlimited
+  generation and commercial rights on paid tiers. Programmatic API access is not
+  a separate self-serve tier - developers request a trial API key, then work
+  with WellSaid to land on a business plan for production API use, with API
+  usage governed by a monthly character quota rather than downloaded minutes.
+  Studio prices below are published; API per-character rates are quote-based and
+  not published.
+notes: >-
+  Studio plan prices captured 2026-07-11 from wellsaid.io/ai-voice-pricing and
+  may change. Annual studio plans bill yearly at a discount. API access requires
+  a trial key and a business plan; per-character API pricing is not published and
+  must be confirmed with WellSaid during reconciliation.
+sources:
+- https://www.wellsaid.io/ai-voice-pricing
+- https://www.wellsaid.io/text-to-speech-api
+- https://docs.wellsaidlabs.com/docs/getting-started
+- https://docs.wellsaidlabs.com/docs/api-specifications
+plans:
+- id: wellsaid-trial
+  name: Trial
+  type: free
+  description: >-
+    Free tier for evaluating the AI Voice Studio. Basic voice tools and curated
+    voice actors with tone and pitch controls. No commercial rights.
+  entries:
+  - label: Downloaded Minutes
+    name: trial_minutes
+    type: usage
+    metric: minutes
+    limit: 3
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: '0'
+    userMultiplied: false
+  elements:
+  - name: Curated Voice Actors
+  - name: Tone and Pitch Controls
+- id: wellsaid-starter
+  name: Starter
+  type: paid
+  description: >-
+    Entry paid Studio tier with unlimited generation, commercial rights, up to
+    10 projects, all English voices, caption files, 24 kHz audio, and email
+    support.
+  entries:
+  - label: Monthly Price
+    name: starter_monthly
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: '19'
+    userMultiplied: false
+  - label: Annual Price
+    name: starter_annual
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: '120'
+    userMultiplied: false
+  - label: Downloaded Minutes
+    name: starter_minutes
+    type: usage
+    metric: minutes
+    limit: 240
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: Unlimited Generation
+  - name: Commercial Rights
+  - name: All English Voices
+  - name: Caption Files
+  - name: Email Support
+- id: wellsaid-pro
+  name: Pro
+  type: paid
+  description: >-
+    Higher-volume Studio tier with unlimited generation and projects, all
+    English voices, Adobe Express integration, and up to 48 kHz audio.
+  entries:
+  - label: Monthly Price
+    name: pro_monthly
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: '49'
+    userMultiplied: false
+  - label: Annual Price
+    name: pro_annual
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: '396'
+    userMultiplied: false
+  - label: Downloaded Minutes
+    name: pro_minutes
+    type: usage
+    metric: minutes
+    limit: 2160
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: Unlimited Generation
+  - name: Unlimited Projects
+  - name: Adobe Express Integration
+  - name: Up to 48 kHz Audio
+- id: wellsaid-business
+  name: Business
+  type: paid
+  description: >-
+    Annually-billed team tier for up to 5 seats with a shared team workspace,
+    collaborator seats, live chat support, invoicing, and Adobe Premiere Pro
+    integration.
+  entries:
+  - label: Price Per User
+    name: business_monthly_per_user
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: '160'
+    userMultiplied: true
+  - label: Annual Price Per User
+    name: business_annual_per_user
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: '1920'
+    userMultiplied: true
+  - label: Downloaded Minutes Per User
+    name: business_minutes
+    type: usage
+    metric: minutes
+    limit: 2880
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: true
+  elements:
+  - name: Team Workspace
+  - name: Collaborator Seats
+  - name: Live Chat Support
+  - name: Invoicing
+- id: wellsaid-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom tier with unlimited seats, all languages and translation, priority
+    support, up to 96 kHz audio, SSO, SOC 2 compliance, and a dedicated success
+    manager. Production API access with a monthly character quota and higher
+    concurrency is arranged here.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: All Languages and Translation
+  - name: API Access
+  - name: SSO and SOC 2
+  - name: Up to 96 kHz Audio
+  - name: Dedicated Success Manager
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

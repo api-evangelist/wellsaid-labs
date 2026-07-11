@@ -1,0 +1,124 @@
+aid: wellsaid-labs
+url: https://raw.githubusercontent.com/api-evangelist/wellsaid-labs/refs/heads/main/apis.yml
+name: WellSaid Labs
+kind: company
+description: WellSaid Labs is an AI text-to-speech (TTS) platform that turns text
+  into studio-quality synthetic voiceover using a library of 200+ AI voice avatars
+  across many styles, languages, and accents. Beyond the AI Voice Studio web app,
+  WellSaid exposes a documented REST API (base https://api.wellsaidlabs.com/v1)
+  that renders text to speech, streams audio for low time-to-first-byte playback,
+  returns word-level timing and subtitles, manages asynchronous clips, lists voice
+  avatars, and lets teams control pronunciation with replacement libraries and
+  respelling suggestions. The API authenticates with an X-Api-Key header and is
+  gated behind a trial API key and a business plan.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- AI
+- Text to Speech
+- TTS
+- Voice
+- Voiceover
+- Speech Synthesis
+- Audio
+created: '2026-07-11'
+modified: '2026-07-11'
+specificationVersion: '0.19'
+apis:
+- aid: wellsaid-labs:wellsaid-labs-text-to-speech-api
+  name: WellSaid Labs Text-to-Speech API
+  tags:
+  - Text to Speech
+  - TTS
+  - Streaming
+  - Renders
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+  baseURL: https://api.wellsaidlabs.com/v1
+  properties:
+  - url: https://docs.wellsaidlabs.com/docs/getting-started
+    type: Documentation
+  - url: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+    type: APIReference
+  - url: openapi/wellsaid-labs-openapi.yml
+    type: OpenAPI
+  description: Render text to speech and receive the audio as an HTTP stream for low
+    time-to-first-byte playback, or render with word-level timing and subtitle
+    output. Requests take the text, a speaker_id (voice avatar), and an optional
+    model, authenticate with an X-Api-Key header, and return MP3 audio. Limited by
+    default to 1,000 characters per request.
+- aid: wellsaid-labs:wellsaid-labs-clips-api
+  name: WellSaid Labs Clips API
+  tags:
+  - Clips
+  - Async
+  - Rendering
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+  baseURL: https://api.wellsaidlabs.com/v1
+  properties:
+  - url: https://docs.wellsaidlabs.com/docs/getting-started
+    type: Documentation
+  - url: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+    type: APIReference
+  - url: openapi/wellsaid-labs-openapi.yml
+    type: OpenAPI
+  description: Create text-to-speech clips asynchronously, list recent clips, fetch
+    a single clip by id, and combine a list of clips into a single audio file with
+    pauses between them. Useful for longer-form voiceover production where renders
+    are assembled from many segments.
+- aid: wellsaid-labs:wellsaid-labs-voice-avatars-api
+  name: WellSaid Labs Voice Avatars API
+  tags:
+  - Voices
+  - Avatars
+  - Catalog
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.wellsaidlabs.com/reference/available-voice-avatars
+  baseURL: https://api.wellsaidlabs.com/v1
+  properties:
+  - url: https://docs.wellsaidlabs.com/reference/available-voice-avatars
+    type: Documentation
+  - url: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+    type: APIReference
+  - url: openapi/wellsaid-labs-openapi.yml
+    type: OpenAPI
+  description: List the available voice avatars with their metadata - the numeric
+    speaker id, avatar name, style (Narration, Promo, Conversational, Character),
+    language, accent, descriptive characteristics, and compatible models - so a
+    client can pick the right voice for a text-to-speech render.
+- aid: wellsaid-labs:wellsaid-labs-pronunciation-api
+  name: WellSaid Labs Pronunciation API
+  tags:
+  - Pronunciation
+  - Replacement Libraries
+  - Respelling
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+  baseURL: https://api.wellsaidlabs.com/v1
+  properties:
+  - url: https://docs.wellsaidlabs.com/docs/getting-started
+    type: Documentation
+  - url: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+    type: APIReference
+  - url: openapi/wellsaid-labs-openapi.yml
+    type: OpenAPI
+  description: Manage pronunciation across renders. Create and manage replacement
+    libraries and the individual replacements inside them so brand names, acronyms,
+    and jargon are spoken consistently, and fetch respelling suggestions that help
+    coax the correct pronunciation of a difficult word.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/wellsaid-labs
+- type: Website
+  url: https://wellsaidlabs.com
+- type: Documentation
+  url: https://docs.wellsaidlabs.com/docs/getting-started
+- type: Plans
+  url: plans/wellsaid-labs-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/wellsaid-labs-rate-limits.yml
+- type: FinOps
+  url: finops/wellsaid-labs-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

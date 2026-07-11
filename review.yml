@@ -1,0 +1,106 @@
+aid: wellsaid-labs
+name: WellSaid Labs
+review:
+  question: Does WellSaid Labs expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-11'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. WellSaid Labs describes a "streaming"
+    text-to-speech endpoint, but the streaming is ordinary HTTP response
+    streaming: POST /tts/stream returns a chunked stream of an MP3 audio file
+    (not the finished file) over HTTPS so the client can start playback with a
+    low time-to-first-byte. This is request/response HTTP with a streamed body,
+    not a server-push event stream (WebSocket or SSE) and not a bidirectional
+    channel, so there is no asynchronous message-driven surface to model.
+findings:
+  summary: |
+    WellSaid Labs does not publish a documented public WebSocket API. WellSaid
+    is an AI text-to-speech (TTS) voiceover platform. Its public API is a REST
+    API at base https://api.wellsaidlabs.com/v1, authenticated with an
+    X-Api-Key header. The documented surface renders text to speech
+    (POST /tts/stream, POST /word-timing), manages asynchronous clips
+    (POST/GET /clips, GET /clips/{id}, POST /clips/combine), lists voice avatars
+    (GET /avatars), and controls pronunciation through replacement libraries and
+    respelling suggestions. The /tts/stream endpoint returns a stream of the
+    audio file rather than the finished file, but this is HTTP response
+    streaming over a normal POST request - not a WebSocket (ws:// or wss://) and
+    not Server-Sent Events. No realtime, bidirectional, or event-driven
+    WebSocket endpoint is documented anywhere in the WellSaid API reference as of
+    the review date.
+  accessModel: |
+    API access is gated. Developers create a free WellSaid account, request a
+    trial API key, and then work with WellSaid to land on a business plan for
+    production use. WellSaid states it does not currently support end-user
+    authentication and recommends calling the API from an internal or trusted
+    source. Default keys are limited to 3 requests per second and 1,000
+    characters per request, plus a monthly character quota; higher concurrency
+    is available on request.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.wellsaidlabs.com/v1
+      documented: true
+      note: All documented endpoints are HTTPS REST authenticated with an X-Api-Key header.
+    - protocol: HTTP Response Streaming
+      scheme: https
+      documented: true
+      note: >-
+        POST /tts/stream returns a chunked stream of the MP3 audio over the same
+        REST request for low time-to-first-byte. This is a streamed HTTP
+        response body, not a WebSocket or SSE server-push channel.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in the WellSaid API reference as of the review date.
+  endpointsConfirmedRest:
+    - POST   https://api.wellsaidlabs.com/v1/tts/stream
+    - POST   https://api.wellsaidlabs.com/v1/word-timing
+    - POST   https://api.wellsaidlabs.com/v1/clips
+    - GET    https://api.wellsaidlabs.com/v1/clips
+    - GET    https://api.wellsaidlabs.com/v1/clips/{clip_id}
+    - POST   https://api.wellsaidlabs.com/v1/clips/combine
+    - GET    https://api.wellsaidlabs.com/v1/avatars
+    - GET    https://api.wellsaidlabs.com/v1/replacement-libraries
+    - POST   https://api.wellsaidlabs.com/v1/replacement-libraries
+    - GET    https://api.wellsaidlabs.com/v1/replacement-libraries/{library_id}
+    - DELETE https://api.wellsaidlabs.com/v1/replacement-libraries/{library_id}
+    - GET    https://api.wellsaidlabs.com/v1/replacement-libraries/{library_id}/replacements
+    - POST   https://api.wellsaidlabs.com/v1/replacement-libraries/{library_id}/replacements
+    - GET    https://api.wellsaidlabs.com/v1/replacement-libraries/{library_id}/replacements/{replacement_id}
+    - DELETE https://api.wellsaidlabs.com/v1/replacement-libraries/{library_id}/replacements/{replacement_id}
+    - GET    https://api.wellsaidlabs.com/v1/respelling-suggestions
+sources:
+  - url: https://docs.wellsaidlabs.com/docs/getting-started
+    type: Documentation
+    note: API getting started; free account, trial key, then business plan for production.
+  - url: https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+    type: APIReference
+    note: Base URL https://api.wellsaidlabs.com/v1; X-Api-Key auth; POST /tts/stream returns MP3 audio.
+  - url: https://docs.wellsaidlabs.com/docs/api-specifications
+    type: Documentation
+    note: >-
+      Rate limits (3 req/sec, 1,000 chars/request, monthly quota); x-rate-limit-*
+      and x-quota-* response headers; /tts/stream returns a stream of the audio
+      file, not the finished file. No WebSocket mentioned.
+  - url: https://docs.wellsaidlabs.com/reference/available-voice-avatars
+    type: Documentation
+    note: Voice avatar catalog - id, name, style, language, accent, characteristics, models.
+  - url: https://docs.wellsaidlabs.com/llms.txt
+    type: Documentation
+    note: >-
+      Index of endpoints - clips, word-timing, avatars, clips/combine,
+      replacement-libraries, respelling-suggestions. All REST.
+  - url: https://github.com/wellsaid-labs/simple-api-example
+    type: SourceCode
+    note: Official barebones example calling the TTS endpoint with a text and speaker selection.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. WellSaid's public API is
+    request/response REST over HTTPS with an X-Api-Key header; its only
+    "streaming" is a chunked HTTP audio response body on POST /tts/stream, which
+    is not a server-push event stream. No AsyncAPI document was created because
+    there is no WebSocket or SSE transport on WellSaid's own API to model.

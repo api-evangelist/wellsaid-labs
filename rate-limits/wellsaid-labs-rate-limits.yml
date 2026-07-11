@@ -1,0 +1,80 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: WellSaid Labs
+providerId: wellsaid-labs
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- AI
+- Text to Speech
+- TTS
+- Rate Limiting
+- Quotas
+description: >-
+  WellSaid Labs publishes concrete API limits. A default API key is limited to 3
+  requests per second and 1,000 characters per request, on top of a unique total
+  monthly character quota per account. Higher concurrency is available on request
+  to WellSaid. Every response carries rate-limit and quota state on
+  x-rate-limit-limit / x-rate-limit-remaining / x-rate-limit-reset and
+  x-quota-limit / x-quota-remaining / x-quota-reset headers, so clients can
+  self-throttle and track remaining monthly characters.
+notes: >-
+  Numbers captured 2026-07-11 from docs.wellsaidlabs.com/docs/api-specifications.
+  The per-account monthly character quota is set per plan and is not a single
+  published figure; confirm your account quota with WellSaid. Contact WellSaid to
+  raise concurrency above the default 3 requests per second.
+sources:
+- https://docs.wellsaidlabs.com/docs/api-specifications
+- https://docs.wellsaidlabs.com/reference/getting-started-with-your-api
+- https://docs.wellsaidlabs.com/docs/getting-started
+responseCodes:
+  throttled: 429
+limits:
+- name: Request Rate
+  scope: api-key
+  metric: requests
+  limit: 3 per second
+  notes: Default API keys allow 3 requests per 1 second. Higher concurrency available on request.
+- name: Characters Per Request
+  scope: request
+  metric: characters
+  limit: 1000
+  notes: A single render request may include up to 1,000 characters of text.
+- name: Monthly Character Quota
+  scope: account
+  metric: characters
+  limit: per plan
+  notes: Each account has a unique total monthly quota of characters; tracked via x-quota-* headers.
+responseHeaders:
+- name: x-rate-limit-limit
+  description: The request-rate limit applied to the key.
+- name: x-rate-limit-remaining
+  description: Requests remaining in the current rate window.
+- name: x-rate-limit-reset
+  description: When the current rate window resets.
+- name: x-quota-limit
+  description: The account's total monthly character quota.
+- name: x-quota-remaining
+  description: Characters remaining in the current monthly quota.
+- name: x-quota-reset
+  description: When the monthly character quota resets.
+policies:
+- name: Trusted Source Only
+  description: >-
+    WellSaid does not currently support end-user authentication and recommends
+    making API requests from an internal or trusted source rather than exposing
+    the API key to end users.
+- name: Backoff Strategy
+  description: >-
+    Clients should honor the x-rate-limit-* headers, self-throttle to stay under
+    3 requests per second, and apply exponential backoff with jitter on 429
+    responses.
+- name: Higher Concurrency On Request
+  description: >-
+    Accounts needing more than 3 requests per second can request raised
+    concurrency limits from WellSaid.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
