@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/wellsaid-labs-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: apiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-Api-Key
+  description: API key issued by WellSaid Labs, passed in the X-Api-Key header. Request a trial
+    key from the console; production use requires a business plan.
+  sources:
+  - openapi/wellsaid-labs-openapi.yml

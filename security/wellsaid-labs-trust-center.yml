@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: searched
+probe: true
+source: https://trust.wellsaidlabs.com/
+url: https://trust.wellsaidlabs.com/
+certifications:
+- SOC 2
+- GDPR
+evidence:
+- source: https://trust.wellsaidlabs.com/
+  keywords:
+  - soc2
+  - trust center
+  - gdpr

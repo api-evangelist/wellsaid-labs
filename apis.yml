@@ -107,6 +107,12 @@ apis:
     and jargon are spoken consistently, and fetch respelling suggestions that help
     coax the correct pronunciation of a difficult word.
 common:
+- type: TrustCenter
+  url: security/wellsaid-labs-trust-center.yml
+- type: DomainSecurity
+  url: security/wellsaid-labs-domain-security.yml
+- type: Authentication
+  url: authentication/wellsaid-labs-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/wellsaid-labs
 - type: Website
