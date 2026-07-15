@@ -107,6 +107,8 @@ apis:
     and jargon are spoken consistently, and fetch respelling suggestions that help
     coax the correct pronunciation of a difficult word.
 common:
+- type: AgenticAccess
+  url: agentic-access/wellsaid-labs-agentic-access.yml
 - type: TrustCenter
   url: security/wellsaid-labs-trust-center.yml
 - type: DomainSecurity
