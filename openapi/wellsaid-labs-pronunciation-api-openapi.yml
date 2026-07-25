@@ -1,0 +1,285 @@
+openapi: 3.0.3
+info:
+  title: WellSaid Labs Clips Pronunciation API
+  description: The WellSaid Labs API renders text into studio-quality AI voiceover. It exposes streaming text-to-speech (audio returned as an HTTP stream for low time-to-first-byte playback), word-level timing and subtitle rendering, asynchronous clip creation and combination, a catalog of voice avatars, and pronunciation control via replacement libraries and respelling suggestions. All requests authenticate with an X-Api-Key header. WellSaid does not currently support end-user authentication and recommends making requests from an internal or trusted source. API access is gated behind a trial API key and a business plan. Endpoints, request fields, and response shapes here are modeled from the public documentation at docs.wellsaidlabs.com and are honestly approximated where the reference does not publish a full schema.
+  version: '1.0'
+  contact:
+    name: WellSaid Labs
+    url: https://wellsaidlabs.com
+servers:
+- url: https://api.wellsaidlabs.com/v1
+  description: WellSaid Labs API
+security:
+- apiKeyAuth: []
+tags:
+- name: Pronunciation
+  description: Replacement libraries and respelling suggestions for pronunciation control.
+paths:
+  /replacement-libraries:
+    get:
+      operationId: listReplacementLibraries
+      tags:
+      - Pronunciation
+      summary: List replacement libraries
+      description: Returns the list of available pronunciation replacement libraries.
+      responses:
+        '200':
+          description: A list of replacement libraries.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReplacementLibrary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createReplacementLibrary
+      tags:
+      - Pronunciation
+      summary: Create a replacement library
+      description: Creates a new replacement library for grouping pronunciation replacements.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: A human-readable name for the library.
+              required:
+              - name
+      responses:
+        '201':
+          description: The created replacement library.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplacementLibrary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /replacement-libraries/{library_id}:
+    get:
+      operationId: getReplacementLibrary
+      tags:
+      - Pronunciation
+      summary: Get a replacement library
+      description: Returns information about a single replacement library.
+      parameters:
+      - $ref: '#/components/parameters/LibraryId'
+      responses:
+        '200':
+          description: The requested replacement library.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplacementLibrary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteReplacementLibrary
+      tags:
+      - Pronunciation
+      summary: Delete a replacement library
+      description: Deletes a replacement library and its replacements.
+      parameters:
+      - $ref: '#/components/parameters/LibraryId'
+      responses:
+        '204':
+          description: The replacement library was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /replacement-libraries/{library_id}/replacements:
+    get:
+      operationId: listReplacements
+      tags:
+      - Pronunciation
+      summary: List replacements in a library
+      description: Returns the list of replacements contained in a replacement library.
+      parameters:
+      - $ref: '#/components/parameters/LibraryId'
+      responses:
+        '200':
+          description: A list of replacements.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Replacement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createReplacement
+      tags:
+      - Pronunciation
+      summary: Create a replacement
+      description: Creates a new pronunciation replacement in the library.
+      parameters:
+      - $ref: '#/components/parameters/LibraryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplacementInput'
+      responses:
+        '201':
+          description: The created replacement.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Replacement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /replacement-libraries/{library_id}/replacements/{replacement_id}:
+    get:
+      operationId: getReplacement
+      tags:
+      - Pronunciation
+      summary: Get a replacement
+      description: Returns a single replacement from a library.
+      parameters:
+      - $ref: '#/components/parameters/LibraryId'
+      - $ref: '#/components/parameters/ReplacementId'
+      responses:
+        '200':
+          description: The requested replacement.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Replacement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteReplacement
+      tags:
+      - Pronunciation
+      summary: Delete a replacement
+      description: Removes a replacement from a library.
+      parameters:
+      - $ref: '#/components/parameters/LibraryId'
+      - $ref: '#/components/parameters/ReplacementId'
+      responses:
+        '204':
+          description: The replacement was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /respelling-suggestions:
+    get:
+      operationId: getRespellingSuggestions
+      tags:
+      - Pronunciation
+      summary: Get respelling suggestions
+      description: Returns respelling suggestions for a word to help coax the correct pronunciation from the voice avatar.
+      parameters:
+      - name: word
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The word to get respelling suggestions for.
+      responses:
+        '200':
+          description: A list of respelling suggestions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    ReplacementId:
+      name: replacement_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The id of the replacement.
+    LibraryId:
+      name: library_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The id of the replacement library.
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid X-Api-Key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Replacement:
+      type: object
+      properties:
+        id:
+          type: string
+        original:
+          type: string
+        replacement:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ReplacementLibrary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    ReplacementInput:
+      type: object
+      properties:
+        original:
+          type: string
+          description: The original word or phrase to replace.
+        replacement:
+          type: string
+          description: The respelled or substitute pronunciation to speak instead.
+      required:
+      - original
+      - replacement
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: API key issued by WellSaid Labs, passed in the X-Api-Key header. Request a trial key from the console; production use requires a business plan.

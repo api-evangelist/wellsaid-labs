@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: WellSaid Labs Clips API
+  description: The WellSaid Labs API renders text into studio-quality AI voiceover. It exposes streaming text-to-speech (audio returned as an HTTP stream for low time-to-first-byte playback), word-level timing and subtitle rendering, asynchronous clip creation and combination, a catalog of voice avatars, and pronunciation control via replacement libraries and respelling suggestions. All requests authenticate with an X-Api-Key header. WellSaid does not currently support end-user authentication and recommends making requests from an internal or trusted source. API access is gated behind a trial API key and a business plan. Endpoints, request fields, and response shapes here are modeled from the public documentation at docs.wellsaidlabs.com and are honestly approximated where the reference does not publish a full schema.
+  version: '1.0'
+  contact:
+    name: WellSaid Labs
+    url: https://wellsaidlabs.com
+servers:
+- url: https://api.wellsaidlabs.com/v1
+  description: WellSaid Labs API
+security:
+- apiKeyAuth: []
+tags:
+- name: Clips
+  description: Asynchronous clip creation, retrieval, and combination.
+paths:
+  /clips:
+    get:
+      operationId: listClips
+      tags:
+      - Clips
+      summary: List recent clips
+      description: Returns a list of recently created text-to-speech clips.
+      responses:
+        '200':
+          description: A list of clips.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Clip'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createClip
+      tags:
+      - Clips
+      summary: Create a clip asynchronously
+      description: Creates a new text-to-speech clip asynchronously. The clip is rendered in the background; poll the clip by id to retrieve its status and audio.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TtsRequest'
+      responses:
+        '202':
+          description: The clip was accepted for asynchronous rendering.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clip'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /clips/{clip_id}:
+    get:
+      operationId: getClip
+      tags:
+      - Clips
+      summary: Get a single clip
+      description: Returns information about a single clip, including its render status and audio URL.
+      parameters:
+      - $ref: '#/components/parameters/ClipId'
+      responses:
+        '200':
+          description: The requested clip.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clip'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clips/combine:
+    post:
+      operationId: combineClips
+      tags:
+      - Clips
+      summary: Combine clips into one file
+      description: Combines a list of clips into a single audio file, inserting pauses between them. Useful for assembling longer-form voiceover from many rendered segments.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clip_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: The ids of the clips to combine, in order.
+                pause:
+                  type: number
+                  format: float
+                  description: Pause in seconds to insert between clips.
+              required:
+              - clip_ids
+      responses:
+        '200':
+          description: The combined audio file (or a clip referencing it).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clip'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Clip:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The clip id.
+        status:
+          type: string
+          description: Render status of the clip, for example "processing" or "complete".
+        text:
+          type: string
+        speaker_id:
+          type: string
+        audio_url:
+          type: string
+          description: URL to the rendered audio once the clip is complete.
+        created_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    TtsRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The text to convert to speech. Default keys allow up to 1,000 characters per request.
+        speaker_id:
+          type: string
+          description: The voice avatar (speaker) id to render with, for example "3".
+        model:
+          type: string
+          description: The voice model to use, for example "caruso" or "legacy".
+      required:
+      - text
+      - speaker_id
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit or monthly character quota exceeded. Inspect the x-rate-limit-* and x-quota-* response headers.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid X-Api-Key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ClipId:
+      name: clip_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The id of the clip.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: API key issued by WellSaid Labs, passed in the X-Api-Key header. Request a trial key from the console; production use requires a business plan.

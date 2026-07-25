@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: WellSaid Labs Clips Voice Avatars API
+  description: The WellSaid Labs API renders text into studio-quality AI voiceover. It exposes streaming text-to-speech (audio returned as an HTTP stream for low time-to-first-byte playback), word-level timing and subtitle rendering, asynchronous clip creation and combination, a catalog of voice avatars, and pronunciation control via replacement libraries and respelling suggestions. All requests authenticate with an X-Api-Key header. WellSaid does not currently support end-user authentication and recommends making requests from an internal or trusted source. API access is gated behind a trial API key and a business plan. Endpoints, request fields, and response shapes here are modeled from the public documentation at docs.wellsaidlabs.com and are honestly approximated where the reference does not publish a full schema.
+  version: '1.0'
+  contact:
+    name: WellSaid Labs
+    url: https://wellsaidlabs.com
+servers:
+- url: https://api.wellsaidlabs.com/v1
+  description: WellSaid Labs API
+security:
+- apiKeyAuth: []
+tags:
+- name: Voice Avatars
+  description: Catalog of available AI voice avatars and their metadata.
+paths:
+  /avatars:
+    get:
+      operationId: listAvatars
+      tags:
+      - Voice Avatars
+      summary: Get available voice avatars
+      description: Lists all available voice avatars with their metadata - the numeric speaker id, avatar name, style, language, accent, descriptive characteristics, and compatible models.
+      responses:
+        '200':
+          description: A list of voice avatars.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Avatar'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Avatar:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The numeric speaker id used as speaker_id in render requests.
+        name:
+          type: string
+          description: The voice avatar name, for example "Alana B.".
+        style:
+          type: string
+          description: Voice style such as Narration, Promo, Conversational, or Character.
+        language:
+          type: string
+        accent:
+          type: string
+          description: Accent or region, for example "United States" or "England".
+        characteristics:
+          type: array
+          items:
+            type: string
+          description: Descriptive tags such as "Clear", "Crisp", "Focused".
+        models:
+          type: array
+          items:
+            type: string
+          description: Compatible models such as "caruso" and "legacy".
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid X-Api-Key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: API key issued by WellSaid Labs, passed in the X-Api-Key header. Request a trial key from the console; production use requires a business plan.
