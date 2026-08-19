@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WellSaid Labs Clips API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clips",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List recent clips",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/clips"
+          },
+          "docs": "Returns a list of recently created text-to-speech clips."
+        },
+        {
+          "info": {
+            "name": "Create a clip asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/clips",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new text-to-speech clip asynchronously. The clip is rendered in the background; poll the clip by id to retrieve its status and audio."
+        },
+        {
+          "info": {
+            "name": "Get a single clip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/clips/:clip_id",
+            "params": [
+              {
+                "name": "clip_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the clip."
+              }
+            ]
+          },
+          "docs": "Returns information about a single clip, including its render status and audio URL."
+        },
+        {
+          "info": {
+            "name": "Combine clips into one file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/clips/combine",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Combines a list of clips into a single audio file, inserting pauses between them. Useful for assembling longer-form voiceover from many rendered segments."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

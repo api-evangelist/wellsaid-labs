@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WellSaid Labs Clips Voice Avatars API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Voice Avatars",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get available voice avatars",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/avatars"
+          },
+          "docs": "Lists all available voice avatars with their metadata - the numeric speaker id, avatar name, style, language, accent, descriptive characteristics, and compatible models."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

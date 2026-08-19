@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WellSaid Labs Clips Text-to-Speech API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Text-to-Speech",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Render text to speech (streaming)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/tts/stream",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renders the supplied text with the chosen voice avatar and returns the result as a stream of an audio file (MP3), not the finished file, so the client can begin playback with a low time-to-first-byte. Default keys are limited to 1,000 characters per request. Accepts a subset of SSML tags."
+        },
+        {
+          "info": {
+            "name": "Render text to speech with timing information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/word-timing",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renders text to speech and returns the audio together with word-level timing information and subtitles, so captions can be aligned to the generated voiceover."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,201 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WellSaid Labs Clips Pronunciation API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pronunciation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List replacement libraries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries"
+          },
+          "docs": "Returns the list of available pronunciation replacement libraries."
+        },
+        {
+          "info": {
+            "name": "Create a replacement library",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new replacement library for grouping pronunciation replacements."
+        },
+        {
+          "info": {
+            "name": "Get a replacement library",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id",
+            "params": [
+              {
+                "name": "library_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement library."
+              }
+            ]
+          },
+          "docs": "Returns information about a single replacement library."
+        },
+        {
+          "info": {
+            "name": "Delete a replacement library",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id",
+            "params": [
+              {
+                "name": "library_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement library."
+              }
+            ]
+          },
+          "docs": "Deletes a replacement library and its replacements."
+        },
+        {
+          "info": {
+            "name": "List replacements in a library",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements",
+            "params": [
+              {
+                "name": "library_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement library."
+              }
+            ]
+          },
+          "docs": "Returns the list of replacements contained in a replacement library."
+        },
+        {
+          "info": {
+            "name": "Create a replacement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements",
+            "params": [
+              {
+                "name": "library_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement library."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new pronunciation replacement in the library."
+        },
+        {
+          "info": {
+            "name": "Get a replacement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements/:replacement_id",
+            "params": [
+              {
+                "name": "library_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement library."
+              },
+              {
+                "name": "replacement_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement."
+              }
+            ]
+          },
+          "docs": "Returns a single replacement from a library."
+        },
+        {
+          "info": {
+            "name": "Delete a replacement",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wellsaidlabs.com/v1/replacement-libraries/:library_id/replacements/:replacement_id",
+            "params": [
+              {
+                "name": "library_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement library."
+              },
+              {
+                "name": "replacement_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the replacement."
+              }
+            ]
+          },
+          "docs": "Removes a replacement from a library."
+        },
+        {
+          "info": {
+            "name": "Get respelling suggestions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wellsaidlabs.com/v1/respelling-suggestions",
+            "params": [
+              {
+                "name": "word",
+                "value": "",
+                "type": "query",
+                "description": "The word to get respelling suggestions for."
+              }
+            ]
+          },
+          "docs": "Returns respelling suggestions for a word to help coax the correct pronunciation from the voice avatar."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
