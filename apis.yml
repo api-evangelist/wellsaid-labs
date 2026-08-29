@@ -11,6 +11,18 @@ description: WellSaid Labs is an AI text-to-speech (TTS) platform that turns tex
   avatars, and lets teams control pronunciation with replacement libraries and
   respelling suggestions. The API authenticates with an X-Api-Key header and is
   gated behind a trial API key and a business plan.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: self-serve
